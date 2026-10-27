@@ -50,27 +50,12 @@ public class OrderResource {
 
     @GetMapping("/{orderId}")
     public OrderResponse get(@PathVariable String orderId) {
-        return toResponse(getOrderUseCase.execute(orderId));
+        Order order = getOrderUseCase.execute(orderId);
+        return OrderResponse.from(order);
     }
 
     @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<CancelOrderResponse> cancel(@PathVariable String orderId) {
         return ResponseEntity.accepted().body(new CancelOrderResponse(cancelOrderUseCase.execute(orderId)));
-    }
-
-    private OrderResponse toResponse(Order order) {
-        return new OrderResponse(
-                order.getUserId(),
-                order.getItems().stream()
-                        .map(item -> new OrderResponse.OrderItemResponse(
-                                item.getProductId(),
-                                item.getProductPrice(),
-                                item.getProductQuantity()
-                        ))
-                        .toList(),
-                order.getAddress(),
-                order.getPaymentMethod(),
-                order.getStatus()
-        );
     }
 }

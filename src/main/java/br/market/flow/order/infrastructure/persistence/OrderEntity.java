@@ -46,7 +46,7 @@ public class OrderEntity {
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemEntity> items = new ArrayList<>();
+    private final List<ItemEntity> items = new ArrayList<>();
 
     @PrePersist
     void onCreate() {
